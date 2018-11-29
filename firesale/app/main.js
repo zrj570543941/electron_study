@@ -18,6 +18,8 @@ const getFileFromUser = exports.getFileFromUser  = (targetWindow) => {
 
 const openFile = (targetWindow, file) => {
   const content = fs.readFileSync(file).toString();
+  app.addRecentDocument(file);
+  targetWindow.setRepresentedFilename(file);
   targetWindow.webContents.send('file-opened', file, content);
 };
 
@@ -45,4 +47,13 @@ app.on('ready', () => {
   //   mainWindow = null;
   // });
   createWindow()
+});
+
+app.on('will-finish-launching', () => {
+  app.on('open-file', (event, file) => {
+    const win = createWindow();
+    win.once('ready-to-show', () => {
+      openFile(win, file);
+    });
+  });
 });
