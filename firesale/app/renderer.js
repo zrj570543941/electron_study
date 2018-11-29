@@ -3,7 +3,7 @@ const marked = require('marked');
 const {ipcRenderer} = require('electron')
 const path = require('path');
 
-// 用于缓存当前正在编辑的文件的路径和围边机时的文本内容
+// 用于缓存当前正在编辑的文件的路径和未编辑时的文本内容
 let filePath = null;
 let originalContent = '';
 const currentWindow = remote.getCurrentWindow()
@@ -52,3 +52,11 @@ ipcRenderer.on('file-opened', (event, file, content) => {
 newFileButton.addEventListener('click', () => {
   mainProcess.createWindow();
 });
+
+saveHtmlButton.addEventListener('click', () => {
+  mainProcess.saveHtml(currentWindow, htmlView.innerHTML);
+});
+
+saveMarkdownButton.addEventListener('click', () => {
+  mainProcess.saveMarkdown(currentWindow, filePath, markdownView.value)
+})

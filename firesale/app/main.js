@@ -37,6 +37,37 @@ const createWindow = exports.createWindow = () => {
   return newWindow;
 };
 
+const saveHtml = exports.saveHtml = (targetWindow, content) => {
+  const file = dialog.showSaveDialog(targetWindow, {
+    title: 'Save HTML',
+    defaultPath: app.getPath('documents'),
+    filters: [
+      { name: 'HTML Files', extensions: ['html', 'htm'] }
+    ]
+  });
+  if (!file) return;
+  fs.writeFileSync(file, content);
+};
+
+
+const saveMarkdown = exports.saveMarkdown = (targetWindow, file, content) => {
+  if (!file) {
+    file = dialog.showSaveDialog(targetWindow, {
+      title: 'Save Markdown',
+      defaultPath: app.getPath('documents'),
+      filters: [
+        { name: 'Markdown Files', extensions: ['md', 'markdown'] }
+      ]
+    });
+  }
+  
+  if (!file) return;
+  
+  fs.writeFileSync(file, content);
+  // 若没有打开文件，而直接新建后想保存，就在保存完后在window title上更新为相应的文件名
+  openFile(targetWindow, file);
+};
+
 app.on('ready', () => {
   // mainWindow = new BrowserWindow({ show: false });
   // mainWindow.loadFile(`${__dirname}/index.html`);
