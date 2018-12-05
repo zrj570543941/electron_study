@@ -1,4 +1,5 @@
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, Menu } = require('electron');
+const createApplicationMenu = require('./application-menu');
 const fs = require('fs')
 
 const windows = new Set();
@@ -90,8 +91,6 @@ const saveMarkdown = exports.saveMarkdown = (targetWindow, file, content) => {
 
 const startWatchingFile = (targetWindow, file) => {
   stopWatchingFile(targetWindow);
-  console.log(2)
-  // todo:watch不生效
   // const watcher = fs.watchFile(file, (cur, prev)=> {
   //   // console.log(event)
   //   // if (cur.mtimeMs !== prev.mtimeMs) {
@@ -124,6 +123,7 @@ app.on('ready', () => {
   // mainWindow.on('closed', () => {
   //   mainWindow = null;
   // });
+  createApplicationMenu();
   createWindow()
 });
 
