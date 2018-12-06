@@ -21,6 +21,18 @@ const openInDefaultButton = document.querySelector('#open-in-default');
 const renderMarkdownToHtml = (markdown) => {
   htmlView.innerHTML = marked(markdown, { sanitize: true });
 };
+const showFile = () => {
+  if (!filePath) {
+    return alert('This file has not been saved to the filesystem.');
+  }
+  shell.showItemInFolder(filePath);
+};
+const openInDefaultApplication = () => {
+  if (!filePath) {
+    return alert('This file has not been saved to the filesystem.');
+  }
+  shell.openItem(filePath);
+};
 
 // 基于当前编辑的文件更新window tile
 const updateUserInterface = (isEdited) => {
@@ -45,6 +57,8 @@ const renderFile = (file, content) => {
   markdownView.value = content;
   renderMarkdownToHtml(content);
   updateUserInterface(false);
+  showFileButton.disabled = false;
+  openInDefaultButton.disabled = false;
 };
 const isDifferentContent = (content) => content !== markdownView.value;
 
@@ -142,3 +156,6 @@ markdownView.addEventListener('drop', (event) => {
   markdownView.classList.remove('drag-over');
   markdownView.classList.remove('drag-error');
 });
+
+showFileButton.addEventListener('click', showFile);
+openInDefaultButton.addEventListener('click', openInDefaultApplication);
